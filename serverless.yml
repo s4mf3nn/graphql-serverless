@@ -1,0 +1,58 @@
+service: graphql-serverless
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:GetItem
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.stage}-users
+    - Effect: Allow
+      Action: dynamodb:scan
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.stage}-orders
+plugin:
+  - serverless-offline
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  serverless-offline:
+    port: 3000
+    host: 0.0.0.0
+
+functions:
+  graphql:
+    handler: functions/graphql.handler
+    events:
+      - http:
+          path: /graphql
+          method: post
+          cors: true
+    environment:
+      tableOrders: ${self:custom.stage}-orders
+      tableUsers: ${self:custom.stage}-users
+
+resources:
+  Resources:
+    ordersTable:
+      Type: AWS.DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.stage}-orders
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    usersTable:
+      Type: AWS.DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.stage}-users
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST

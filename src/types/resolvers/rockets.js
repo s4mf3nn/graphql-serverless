@@ -1,4 +1,4 @@
-const { getAllRockets, getRocket } = require("../api/rockets");
+const { getAllRockets, getRocket } = require("../../api/rockets");
 
 module.exports = {
   Query: {

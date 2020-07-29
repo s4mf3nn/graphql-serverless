@@ -1,6 +1,6 @@
-const axios = require("axios");
+import axios from "axios";
 
-async function getAllLaunches() {
+export async function getAllLaunches() {
   try {
     const response = await axios.get("https://api.spacexdata.com/v3/launches");
     return response.data.map((launch) => launchReducer(launch));
@@ -10,7 +10,7 @@ async function getAllLaunches() {
   }
 }
 
-async function getLaunch({ id }) {
+export async function getLaunch({ id }) {
   try {
     const response = await axios.get(
       "https://api.spacexdata.com/v3/launches/" + id
@@ -36,8 +36,3 @@ function launchReducer(launch) {
     },
   };
 }
-
-module.exports = {
-  getAllLaunches,
-  getLaunch,
-};

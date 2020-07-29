@@ -1,8 +1,8 @@
-const AWS = require("aws-sdk");
+import AWS from "aws-sdk";
 
 AWS.config.update({ region: process.env.awsRegion });
 
-const call = (action, params) => {
+export const call = (action, params) => {
   if (process.env.IS_OFFLINE === "true") {
     const dynamoDb = new AWS.DynamoDB.DocumentClient({
       region: "localhost",
@@ -13,8 +13,4 @@ const call = (action, params) => {
     const dynamoDb = new AWS.DynamoDB.DocumentClient();
     return dynamoDb[action](params).promise();
   }
-};
-
-module.exports = {
-  call,
 };

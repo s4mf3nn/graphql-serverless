@@ -1,4 +1,4 @@
-const { getAllLaunches, getLaunch } = require("../api/launches");
+const { getAllLaunches, getLaunch } = require("../../api/launches");
 
 module.exports = {
   Query: {

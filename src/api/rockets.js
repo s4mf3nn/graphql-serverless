@@ -1,6 +1,6 @@
-const axios = require("axios");
+import axios from "axios";
 
-async function getAllRockets() {
+export async function getAllRockets() {
   try {
     const response = await axios.get("https://api.spacexdata.com/v3/rockets");
     return response.data.map((rocket) => rocketReducer(rocket));
@@ -10,7 +10,7 @@ async function getAllRockets() {
   }
 }
 
-async function getRocket({ id }) {
+export async function getRocket({ id }) {
   try {
     const response = await axios.get(
       "https://api.spacexdata.com/v3/rockets/" + id
@@ -29,8 +29,3 @@ function rocketReducer(rocket) {
     type: rocket.rocket_type,
   };
 }
-
-module.exports = {
-  getAllRockets,
-  getRocket,
-};

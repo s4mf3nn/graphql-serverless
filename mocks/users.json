@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Sam",
+    "email": "sam@fenn.co",
+    "gender": "male"
+  },
+  {
+    "id": "2",
+    "name": "Joe",
+    "email": "joe@acme.co",
+    "gender": "male"
+  },
+  {
+    "id": "3",
+    "name": "Anna",
+    "email": "anna@me.com",
+    "gender": "female"
+  },
+  {
+    "id": "4",
+    "name": "Claudia",
+    "email": "claudia@gmail.com",
+    "gender": "female"
+  }
+]

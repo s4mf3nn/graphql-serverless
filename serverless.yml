@@ -1,42 +1,81 @@
-service: graphql-serverless
+service: graphql
+
+package:
+  excludeDevDependencies: false
+  individually: true
+  exclude:
+    - node_modules/**
+    - mocks/**
 
 provider:
   name: aws
+  # apiKeys:
+  #   - ${self:service}-Key
   runtime: nodejs12.x
+  region: eu-west-3
+  stage: dev
+  timeOut: 10
+  profile: ${self:custom.app.config.profile}
+  environment: ${file(env.yml)}
   iamRoleStatements:
     - Effect: Allow
-      Action: dynamodb:GetItem
-      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.stage}-users
-    - Effect: Allow
-      Action: dynamodb:scan
-      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.stage}-orders
-plugin:
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: [!GetAtt usersTable.Arn]
+
+plugins:
+  - serverless-webpack
+  - serverless-prune-plugin
   - serverless-offline
+  - serverless-dynamodb-local
 
 custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+  prune:
+    automatic: true
+    number: 3
   stage: ${opt:stage, self:provider.stage}
+  app:
+    config: ${file(config-${self:custom.stage}.yml)}
   serverless-offline:
-    port: 3000
+    httpPort: 3030
     host: 0.0.0.0
+  dynamodb:
+    stages:
+      - dev
+    start:
+      host: 0.0.0.0
+      port: 8080
+      inMemory: true
+      migrate: true
+      migration: true
+      seed: true
+    seed:
+      all:
+        sources: ${file(mocks/_resources.yml)}
 
 functions:
   graphql:
-    handler: functions/graphql.handler
+    handler: src/graphql.main
     events:
       - http:
           path: /graphql
           method: post
           cors: true
-    environment:
-      tableOrders: ${self:custom.stage}-orders
-      tableUsers: ${self:custom.stage}-users
 
 resources:
   Resources:
-    ordersTable:
-      Type: AWS.DynamoDB::Table
+    usersTable:
+      Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.stage}-orders
+        TableName: ${self:custom.stage}-users
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -45,14 +84,31 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 
-    usersTable:
-      Type: AWS.DynamoDB::Table
+    followersTable:
+      Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.stage}-users
+        TableName: ${self:custom.stage}-followers
         AttributeDefinitions:
-          - AttributeName: email
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: following
+            AttributeType: S
+          - AttributeName: follower
             AttributeType: S
         KeySchema:
-          - AttributeName: email
+          - AttributeName: id
             KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: followerIndex
+            KeySchema:
+              - AttributeName: follower
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: followingIndex
+            KeySchema:
+              - AttributeName: following
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST

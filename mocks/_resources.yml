@@ -1,0 +1,5 @@
+- table: ${self:custom.stage}-users
+  sources: [./mocks/users.json]
+
+- table: ${self:custom.stage}-followers
+  sources: [./mocks/followers.json]

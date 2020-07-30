@@ -11,7 +11,7 @@ GraphQL-Serverless est un boilerplate backend en cours de développement qui per
 ### Installation du projet
 ```
 $ mkdir graphql-serverless && cd graphql-serverless
-$ git clone https://github.com/s4mf3nn/graphql-sls.git
+$ git clone https://github.com/s4mf3nn/graphql-serverless.git
 $ yarn install
 ```
 

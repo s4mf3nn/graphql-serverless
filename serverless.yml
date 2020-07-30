@@ -15,7 +15,8 @@ provider:
   region: eu-west-3
   stage: dev
   timeOut: 10
-  profile: ${self:custom.app.config.profile}
+  # profile: ${self:custom.app.config.profile}
+  profile: dev
   environment: ${file(env.yml)}
   iamRoleStatements:
     - Effect: Allow
@@ -27,6 +28,15 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: [!GetAtt usersTable.Arn]
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: [!GetAtt followersTable.Arn]
 
 plugins:
   - serverless-webpack

@@ -17,12 +17,13 @@ const typeDefs = gql`
 
   type Query {
     getAllUsers: [User!]!
+    getUser(id: ID!): User!
     following: [User]!
     followers: [User]!
   }
 
   type Mutation {
-    createUser(id: ID!, name: String!, email: String!, gender: Gender): User!
+    createUser(name: String!, email: String!, gender: Gender): User!
   }
 `;
 

@@ -36,7 +36,7 @@ Graphql-Serverless sert également une API GraphQL permettant de créer et liste
 
 ### Exemple de requêtes
 
-```
+```javascript
 query {
     getAllUsers {
         id

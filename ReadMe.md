@@ -30,9 +30,9 @@ $ sls offline start
 
 ### Fonctionnalités
 
-Graphql-Serverless converti l'API Rest de SpaceX en API GraphQL et permet de récupérer des informations sur les Lancements, les fusées et les capsules.
+Graphql-Serverless converti l'API Rest de SpaceX en API GraphQL et permet de récupérer des informations sur les Lancements ainsi que les fusées de la compagnie Space X.
 
-Graphql-Serverless sert également une API GraphQL permettant de list
+Graphql-Serverless sert également une API GraphQL permettant de créer et lister des utilisateurs et des followers.
 
 ### Exemple de requêtes
 

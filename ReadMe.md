@@ -2,11 +2,11 @@
 
 GraphQL-Serverless est un boilerplate backend en cours de développement qui permet de déployer rapidement une API GraphQL dans un environnement sans serveur. Le projet utilise les services suivants :
 
-  - Serverless Framework
-  - AWS Lambda function
-  - AWS DynamoDB
-  - Apollo GraphQL
-  - API Rest SpaceX
+  - [Serverless Framework](https://www.serverless.com/)
+  - [AWS Lambda function](https://aws.amazon.com/fr/lambda/)
+  - [AWS DynamoDB](https://aws.amazon.com/fr/dynamodb/)
+  - [Apollo GraphQL](https://www.apollographql.com/)
+  - [API Rest SpaceX](https://docs.spacexdata.com/?version=latest)
 
 ### Installation du projet
 ```

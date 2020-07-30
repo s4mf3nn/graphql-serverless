@@ -425,10 +425,10 @@ __webpack_require__.r(__webpack_exports__);
 const repo = { ..._repositories_followers_followers__WEBPACK_IMPORTED_MODULE_0__,
   ..._repositories_users_getUser__WEBPACK_IMPORTED_MODULE_1__
 };
-const getAllFollowers = async parent => {
+const getAllFollowers = async root => {
+  const followers = await repo.getFollowers(root.id);
+  if (!followers) return;
   const followersList = [];
-  const followers = await repo.getFollowers(parent.id);
-  if (!followers) return followersList;
   followers.map(item => {
     const user = repo.getUser(item.following);
     followersList.push(user);
@@ -455,10 +455,10 @@ __webpack_require__.r(__webpack_exports__);
 const repo = { ..._repositories_followers_followers__WEBPACK_IMPORTED_MODULE_0__,
   ..._repositories_users_getUser__WEBPACK_IMPORTED_MODULE_1__
 };
-const getAllFollowing = async parent => {
+const getAllFollowing = async root => {
+  const following = await repo.getFollowing(root.id);
+  if (!following) return;
   const followingList = [];
-  const following = await repo.getFollowing(parent.id);
-  if (!following) return followingList;
   following.map(item => {
     const user = repo.getUser(item.follower);
     followingList.push(user);
@@ -478,10 +478,34 @@ const getAllFollowing = async parent => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createUser", function() { return createUser; });
-/* harmony import */ var _repositories_users_createUser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../repositories/users/createUser */ "./src/repositories/users/createUser.js");
+/* harmony import */ var _hapi_joi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hapi/joi */ "@hapi/joi");
+/* harmony import */ var _hapi_joi__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_hapi_joi__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuidv4__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! uuidv4 */ "uuidv4");
+/* harmony import */ var uuidv4__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(uuidv4__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var apollo_server_lambda__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! apollo-server-lambda */ "apollo-server-lambda");
+/* harmony import */ var apollo_server_lambda__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(apollo_server_lambda__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _repositories_users_createUser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../repositories/users/createUser */ "./src/repositories/users/createUser.js");
+
+
+
+
+
+const userValidator = async data => {
+  const schema = _hapi_joi__WEBPACK_IMPORTED_MODULE_0___default.a.object({
+    name: _hapi_joi__WEBPACK_IMPORTED_MODULE_0___default.a.string().required(),
+    email: _hapi_joi__WEBPACK_IMPORTED_MODULE_0___default.a.string().email().required(),
+    gender: _hapi_joi__WEBPACK_IMPORTED_MODULE_0___default.a.string().valid("male", "female").required()
+  });
+  const {
+    error
+  } = schema.validate(data);
+  if (error) throw new apollo_server_lambda__WEBPACK_IMPORTED_MODULE_2__["ApolloError"](error, 400);
+};
 
 async function createUser(args) {
-  const user = await _repositories_users_createUser__WEBPACK_IMPORTED_MODULE_0__["createUser"](args);
+  await userValidator(args);
+  args.id = Object(uuidv4__WEBPACK_IMPORTED_MODULE_1__["uuid"])();
+  const user = await _repositories_users_createUser__WEBPACK_IMPORTED_MODULE_3__["createUser"](args);
   return user;
 }
 
@@ -504,8 +528,31 @@ __webpack_require__.r(__webpack_exports__);
 
 async function getAllUsers() {
   const users = await _repositories_users_getAllUsers__WEBPACK_IMPORTED_MODULE_1__["getAllUsers"]();
-  if (!users) throw new apollo_server_lambda__WEBPACK_IMPORTED_MODULE_0__["ApolloError"]("No users found", 404);
+  if (!users) throw new apollo_server_lambda__WEBPACK_IMPORTED_MODULE_0__["ApolloError"]("Users not found", 404);
   return users;
+}
+
+/***/ }),
+
+/***/ "./src/services/users/getUser.js":
+/*!***************************************!*\
+  !*** ./src/services/users/getUser.js ***!
+  \***************************************/
+/*! exports provided: getUser */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUser", function() { return getUser; });
+/* harmony import */ var apollo_server_lambda__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server-lambda */ "apollo-server-lambda");
+/* harmony import */ var apollo_server_lambda__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server_lambda__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _repositories_users_getUser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../repositories/users/getUser */ "./src/repositories/users/getUser.js");
+
+
+async function getUser(userId) {
+  const user = await _repositories_users_getUser__WEBPACK_IMPORTED_MODULE_1__["getUser"](userId);
+  if (!user) throw new apollo_server_lambda__WEBPACK_IMPORTED_MODULE_0__["ApolloError"]("User not found", 404);
+  return user;
 }
 
 /***/ }),
@@ -594,6 +641,10 @@ const {
 } = __webpack_require__(/*! ../../services/users/getAllUsers */ "./src/services/users/getAllUsers.js");
 
 const {
+  getUser
+} = __webpack_require__(/*! ../../services/users/getUser */ "./src/services/users/getUser.js");
+
+const {
   createUser
 } = __webpack_require__(/*! ../../services/users/createUser */ "./src/services/users/createUser.js");
 
@@ -607,11 +658,14 @@ const {
 
 module.exports = {
   Query: {
-    getAllUsers: () => getAllUsers()
+    getAllUsers: () => getAllUsers(),
+    getUser: (_, {
+      id
+    }) => getUser(id)
   },
   User: {
-    following: getAllUsers => getAllFollowing(getAllUsers),
-    followers: getAllUsers => getAllFollowers(getAllUsers)
+    following: root => getAllFollowing(root),
+    followers: root => getAllFollowers(root)
   },
   Mutation: {
     createUser: async (_, args) => createUser(args)
@@ -727,12 +781,13 @@ const typeDefs = gql`
 
   type Query {
     getAllUsers: [User!]!
+    getUser(id: ID!): User!
     following: [User]!
     followers: [User]!
   }
 
   type Mutation {
-    createUser(id: ID!, name: String!, email: String!, gender: Gender): User!
+    createUser(name: String!, email: String!, gender: Gender): User!
   }
 `;
 module.exports = typeDefs;
@@ -747,6 +802,17 @@ module.exports = typeDefs;
 /***/ (function(module, exports) {
 
 module.exports = require("@graphql-tools/merge");
+
+/***/ }),
+
+/***/ "@hapi/joi":
+/*!****************************!*\
+  !*** external "@hapi/joi" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@hapi/joi");
 
 /***/ }),
 
@@ -780,6 +846,17 @@ module.exports = require("aws-sdk");
 /***/ (function(module, exports) {
 
 module.exports = require("axios");
+
+/***/ }),
+
+/***/ "uuidv4":
+/*!*************************!*\
+  !*** external "uuidv4" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("uuidv4");
 
 /***/ })
 

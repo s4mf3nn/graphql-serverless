@@ -99,10 +99,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLaunch", function() { return getLaunch; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "axios");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _libs_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../libs/constants */ "./src/libs/constants.js");
 
+
+const API_URL = process.env.spacexApiUrl;
 async function getAllLaunches() {
+  const url = `${API_URL}/${_libs_constants__WEBPACK_IMPORTED_MODULE_1__["LAUNCHES"]}`;
+
   try {
-    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://api.spacexdata.com/v3/launches");
+    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url);
     return response.data.map(launch => launchReducer(launch));
   } catch (error) {
     console.log("ERROR : ", error.message);
@@ -112,8 +117,10 @@ async function getAllLaunches() {
 async function getLaunch({
   id
 }) {
+  const url = `${API_URL}/${_libs_constants__WEBPACK_IMPORTED_MODULE_1__["LAUNCHES"]}/${id}`;
+
   try {
-    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://api.spacexdata.com/v3/launches/" + id);
+    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url);
     return launchReducer(response.data);
   } catch (error) {
     console.log("ERROR : ", error.message);
@@ -123,7 +130,7 @@ async function getLaunch({
 
 function launchReducer(launch) {
   return {
-    id: launch.flight_number || 0,
+    id: launch.flight_number,
     mission: launch.mission_name,
     year: launch.launch_year,
     date: launch.launch_date_local,
@@ -151,10 +158,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRocket", function() { return getRocket; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "axios");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _libs_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../libs/constants */ "./src/libs/constants.js");
 
+
+const API_URL = process.env.spacexApiUrl;
 async function getAllRockets() {
+  const url = `${API_URL}/${_libs_constants__WEBPACK_IMPORTED_MODULE_1__["ROCKETS"]}`;
+
   try {
-    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://api.spacexdata.com/v3/rockets");
+    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url);
     return response.data.map(rocket => rocketReducer(rocket));
   } catch (error) {
     console.log("ERROR : ", error.message);
@@ -164,8 +176,10 @@ async function getAllRockets() {
 async function getRocket({
   id
 }) {
+  const url = `${API_URL}/${_libs_constants__WEBPACK_IMPORTED_MODULE_1__["ROCKETS"]}/${id}`;
+
   try {
-    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://api.spacexdata.com/v3/rockets/" + id);
+    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url);
     return rocketReducer(response.data);
   } catch (error) {
     console.log("ERROR : ", error.message);
@@ -175,7 +189,7 @@ async function getRocket({
 
 function rocketReducer(rocket) {
   return {
-    id: rocket.rocket_id || 0,
+    id: rocket.rocket_id,
     name: rocket.rocket_name,
     type: rocket.rocket_type
   };
@@ -216,6 +230,22 @@ exports.main = (event, context, callback) => {
 
   main(event, context, callbackFilter);
 };
+
+/***/ }),
+
+/***/ "./src/libs/constants.js":
+/*!*******************************!*\
+  !*** ./src/libs/constants.js ***!
+  \*******************************/
+/*! exports provided: LAUNCHES, ROCKETS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LAUNCHES", function() { return LAUNCHES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROCKETS", function() { return ROCKETS; });
+const LAUNCHES = "launches";
+const ROCKETS = "rockets";
 
 /***/ }),
 

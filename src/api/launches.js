@@ -1,8 +1,12 @@
 import axios from "axios";
+import { LAUNCHES } from "../libs/constants";
+const API_URL = process.env.spacexApiUrl;
 
 export async function getAllLaunches() {
+  const url = `${API_URL}/${LAUNCHES}`;
+
   try {
-    const response = await axios.get("https://api.spacexdata.com/v3/launches");
+    const response = await axios.get(url);
     return response.data.map((launch) => launchReducer(launch));
   } catch (error) {
     console.log("ERROR : ", error.message);
@@ -11,10 +15,10 @@ export async function getAllLaunches() {
 }
 
 export async function getLaunch({ id }) {
+  const url = `${API_URL}/${LAUNCHES}/${id}`;
+
   try {
-    const response = await axios.get(
-      "https://api.spacexdata.com/v3/launches/" + id
-    );
+    const response = await axios.get(url);
     return launchReducer(response.data);
   } catch (error) {
     console.log("ERROR : ", error.message);
@@ -24,7 +28,7 @@ export async function getLaunch({ id }) {
 
 function launchReducer(launch) {
   return {
-    id: launch.flight_number || 0,
+    id: launch.flight_number,
     mission: launch.mission_name,
     year: launch.launch_year,
     date: launch.launch_date_local,

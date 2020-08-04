@@ -6,8 +6,15 @@ const typeDefs = gql`
     name: String!
     email: String!
     gender: Gender
+    creationDate: String!
+    metadataCreationDate: String!
     following: [User]!
     followers: [User]!
+  }
+
+  type LoginResponse {
+    token: String
+    user: User
   }
 
   enum Gender {
@@ -23,7 +30,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(name: String!, email: String!, gender: Gender): User!
+    createUser(name: String!, email: String!, password: String!, gender: Gender): LoginResponse!
   }
 `;
 

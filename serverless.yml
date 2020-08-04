@@ -56,12 +56,12 @@ custom:
     config: ${file(config-${self:custom.stage}.yml)}
   serverless-offline:
     httpPort: 3030
-    # host: localhost
+    host: localhost
   dynamodb:
     stages:
       - dev
     start:
-      # host: 0.0.0.0
+      host: localhost
       port: 8080
       inMemory: true
       migrate: true
@@ -92,9 +92,18 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: email
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: emailIndex
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
 
     followersTable:

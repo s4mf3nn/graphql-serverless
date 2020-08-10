@@ -8,7 +8,7 @@ export const getAllFollowers = async (root) => {
 
   const followersList = [];
   followers.map(item => {
-    const user = repo.getUser(item.following);
+    const user = repo.getUserById(item.following);
     followersList.push(user);
   });
 

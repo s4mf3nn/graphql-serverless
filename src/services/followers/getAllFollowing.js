@@ -1,6 +1,6 @@
-import * as folowersRepo from "../../repositories/followers/followers";
+import * as followersRepo from "../../repositories/followers/followers";
 import * as usersRepo from "../../repositories/users/getUser";
-const repo = { ...folowersRepo, ...usersRepo };
+const repo = { ...followersRepo, ...usersRepo };
 
 export const getAllFollowing = async (root) => {
   const following = await repo.getFollowing(root.id);
@@ -8,7 +8,7 @@ export const getAllFollowing = async (root) => {
 
   const followingList = [];
   following.map(item => {
-    const user = repo.getUser(item.follower);
+    const user = repo.getUserById(item.follower);
     followingList.push(user);
   });
 

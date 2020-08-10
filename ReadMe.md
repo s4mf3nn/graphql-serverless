@@ -28,6 +28,8 @@ $ sls offline start
 ### URL du serveur
 ```http://localhost:3030/dev/graphql```
 
+![Image of Insomnia](https://image.noelshack.com/fichiers/2020/33/2/1597103132-insomnia.png)
+
 ### Fonctionnalités
 
 Graphql-Serverless converti l'API Rest de SpaceX en API GraphQL et permet de récupérer des informations sur les Lancements ainsi que les fusées de la compagnie Space X.

@@ -28,7 +28,7 @@ $ sls offline start
 ### URL du serveur
 ```http://localhost:3030/dev/graphql```
 
-![Image of Insomnia](https://image.noelshack.com/fichiers/2020/33/2/1597103132-insomnia.png)
+![Image of Insomnia](https://image.noelshack.com/fichiers/2020/33/2/1597103132-insomnia.png | width=100)
 
 ### Fonctionnalités
 
@@ -119,11 +119,8 @@ query {
 * S'abonner à un utilisateur
 * Se désabonner d'un utilisateur
 
-### License
-MIT
-
 ### Auteur
 Samir Fennikh
 
 ### Dernière mise à jour
-30 juillet 2020
+11 août 2020

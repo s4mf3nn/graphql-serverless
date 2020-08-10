@@ -28,7 +28,7 @@ $ sls offline start
 ### URL du serveur
 ```http://localhost:3030/dev/graphql```
 
-![Image of Insomnia](https://image.noelshack.com/fichiers/2020/33/2/1597103132-insomnia.png =100)
+![Image of Insomnia](https://image.noelshack.com/fichiers/2020/33/2/1597103435-insomnia.png)
 
 ### Fonctionnalités
 

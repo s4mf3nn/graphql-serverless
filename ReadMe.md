@@ -75,7 +75,7 @@ query {
 }
 
 mutation {
-    createUser(name: "Samir", email: "samir@domain.com", gender: male) { 
+    createUser(name: "Samir", email: "samir@domain.com", password: "s3cr37", gender: male) { 
         user {
             id
             name

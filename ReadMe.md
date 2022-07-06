@@ -1,6 +1,6 @@
 # 🚀 GraphQL-Serverless
 
-GraphQL-Serverless est un boilerplate backend en cours de développement qui permet de déployer rapidement une API GraphQL dans un environnement sans serveur. Le projet utilise les services suivants :
+GraphQL-Serverless est un boilerplate backend qui permet de déployer rapidement une API GraphQL dans un environnement sans serveur. Le projet utilise les services suivants :
 
   - [Serverless Framework](https://www.serverless.com/)
   - [AWS Lambda function](https://aws.amazon.com/fr/lambda/)
@@ -111,13 +111,6 @@ query {
   }
 }
 ```
-
-### Todos
-* Filtrer et trier les utilisateurs
-* Mettre à jour un utilisateur
-* Supprimer un utilisateur
-* S'abonner à un utilisateur
-* Se désabonner d'un utilisateur
 
 ### Auteur
 Samir Fennikh
